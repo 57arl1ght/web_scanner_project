@@ -35,27 +35,26 @@ def detect_technologies(url):
         html_content = response.text
         html_lower = html_content.lower()
         
-        # 1. Точне визначення вебсервера (наприклад: nginx/1.18.0 або Apache/2.4.41)
+        
         server_header = headers.get('Server', '')
         if server_header:
-            # Беремо перше слово до пробілу, щоб відкинути зайве сміття типу "(Ubuntu)"
+            
             main_server_info = server_header.split(' ')[0]
             detected.append(f"Сервер: {main_server_info}")
         
-        # 2. Точне визначення движка/мови (наприклад: PHP/8.1.2)
+       
         powered_by = headers.get('X-Powered-By', '')
         if powered_by:
             detected.append(f"Движок: {powered_by}")
             
-        # 3. Визначення точної версії CMS (наприклад, WordPress) через мета-теги
-        # Шукаємо щось на зразок: <meta name="generator" content="WordPress 6.1.1" />
+      
         wp_version = re.search(r'<meta name="generator"\s+content="(WordPress.*?)"', html_content, re.IGNORECASE)
         if wp_version:
-            detected.append(wp_version.group(1)) # Додасть "WordPress 6.1.1"
+            detected.append(wp_version.group(1)) 
         elif 'wp-content' in html_lower:
             detected.append('WordPress (версія прихована адміністратором)')
 
-        # 4. Визначення популярних фронтенд фреймворків
+      
         if 'react' in html_lower or 'data-reactroot' in html_lower:
             detected.append('React.js')
         if 'vue' in html_lower or 'data-v-' in html_lower:
