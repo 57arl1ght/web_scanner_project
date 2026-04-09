@@ -51,7 +51,7 @@ def scan_vulnerabilities(url):
             try:
                 res = requests.get(test_url_lfi, timeout=5)
                 if any(error in res.text.lower() for error in lfi_errors):
-                    # ДОДАНО КЛАСИФІКАЦІЮ OWASP ТА CWE
+                    
                     results.append(f"[🛑 Високий Ризик] Directory Traversal (LFI) у параметрі '{param_name}'\n    └─ Класифікація: CWE-22 | OWASP A01:2021-Broken Access Control")
                     break
             except requests.RequestException:
