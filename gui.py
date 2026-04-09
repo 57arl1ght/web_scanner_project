@@ -4,7 +4,7 @@ import threading
 import urllib.parse
 import webbrowser
 
-# Імпортуємо наші модулі
+
 from scanner.network import scan_ports, check_ssl
 from scanner.web import check_security_headers, detect_technologies
 from scanner.vuln import scan_vulnerabilities
@@ -31,20 +31,20 @@ class ScannerGUI:
         self.url_entry.pack(side=tk.LEFT, expand=True, fill=tk.X)
         self.url_entry.insert(0, "http://testphp.vulnweb.com/")
         
-        # --- ІДЕАЛЬНЕ МЕНЮ ТА ОБРОБКА КЛАВІШ ---
+       
         self.context_menu = tk.Menu(self.root, tearoff=0)
         self.context_menu.add_command(label="Вставити", command=self.paste_from_menu)
         self.context_menu.add_command(label="Очистити", command=self.clear_entry)
         
         self.url_entry.bind("<Button-3>", self.show_context_menu)
-        # Прив'язуємо гарячі клавіші ТІЛЬКИ до поля вводу
+        
         self.url_entry.bind("<Control-KeyPress>", self.keyboard_shortcuts)
         # ---------------------------------------
 
         self.scan_btn = ttk.Button(self.url_frame, text="Сканувати", command=self.start_scan)
         self.scan_btn.pack(side=tk.LEFT, padx=(10, 0))
 
-        # --- БЛОК ЧЕКБОКСІВ ---
+        
         self.options_frame = ttk.LabelFrame(self.root, text=" Вибір модулів для сканування ")
         self.options_frame.pack(fill=tk.X, pady=(0, 15), ipadx=10, ipady=5)
 
@@ -90,10 +90,10 @@ class ScannerGUI:
         self.context_menu.tk_popup(event.x_root, event.y_root)
 
     def keyboard_shortcuts(self, event):
-        # 86 - це апаратний код клавіші V (М на укр. розкладці) у Windows
+        
         if getattr(event, 'keycode', 0) == 86:
             self.url_entry.event_generate("<<Paste>>")
-            return "break" # Блокуємо стандартну поведінку, щоб не було подвійної вставки
+            return "break"
 
     def log(self, message):
         self.log_area.config(state=tk.NORMAL)
