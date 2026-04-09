@@ -8,7 +8,7 @@ def scan_ports(hostname):
     
     for port in ports_to_scan:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(1.0) # Таймаут 1 секунда для швидкості
+        sock.settimeout(1.0) 
         result = sock.connect_ex((hostname, port))
         
         if result == 0:
