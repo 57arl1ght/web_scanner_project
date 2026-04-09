@@ -21,8 +21,7 @@ import urllib.parse
 import requests
 
 
-# Невеликий список найтиповіших назв субдоменів.
-# Його легко розширити під час розвитку проєкту.
+
 COMMON_SUBDOMAINS = [
     "www",
     "api",
@@ -57,15 +56,15 @@ def _normalize_domain(domain):
 
     normalized = domain.strip().lower()
 
-    # Якщо користувач передав URL, беремо тільки hostname.
+    
     if "://" in normalized:
         parsed = urllib.parse.urlparse(normalized)
         normalized = parsed.netloc or parsed.path
 
-    # Відкидаємо шлях, якщо він випадково залишився.
+    
     normalized = normalized.split("/", 1)[0]
 
-    # Відкидаємо порт, якщо він є у форматі domain:443.
+   
     normalized = normalized.split(":", 1)[0]
 
     return normalized.strip(".")
@@ -100,27 +99,24 @@ def _extract_subdomains_from_crtsh(domain):
         response.raise_for_status()
         certificates = response.json()
     except (requests.RequestException, ValueError):
-        # Якщо crt.sh не відповідає або повернув некоректний JSON,
-        # просто повертаємо порожній набір. Основна функція продовжить
-        # роботу з активним brute-force, не "падаючи".
+     
         return found_subdomains
 
     for certificate in certificates:
         name_value = certificate.get("name_value", "")
 
-        # В одному записі crt.sh може бути кілька доменів через перенос рядка.
+        
         for raw_name in name_value.splitlines():
             candidate = raw_name.strip().lower()
 
             if not candidate:
                 continue
 
-            # Часто зустрічаються wildcard-записи на кшталт *.example.com.
-            # Для зручності прибираємо "*.", щоб отримати чистий субдомен.
+            
             if candidate.startswith("*."):
                 candidate = candidate[2:]
 
-            # Нас цікавлять лише субдомени, а не сам кореневий домен.
+           
             if candidate == domain:
                 continue
 
@@ -144,8 +140,7 @@ def _resolve_subdomain(subdomain):
     except socket.gaierror:
         return None
     except OSError:
-        # Додатково перехоплюємо системні мережеві помилки,
-        # щоб окремий потік не зупиняв усю перевірку.
+   
         return None
 
 
@@ -203,12 +198,10 @@ def find_subdomains(domain):
 
     found_subdomains = set()
 
-    # Пасивний етап є "тихим": ми працюємо з зовнішнім джерелом даних,
-    # а не з цільовим сервером.
+   
     found_subdomains.update(_extract_subdomains_from_crtsh(normalized_domain))
 
-    # Активний етап доповнює результати, якщо у логах сертифікатів
-    # нічого не знайшлося або частина субдоменів не має SSL-сертифікатів.
+   
     found_subdomains.update(_bruteforce_subdomains(normalized_domain))
 
     return sorted(found_subdomains)
