@@ -27,7 +27,7 @@ def main():
     print(f"\n[+] Початок сканування: {target_url}")
     print("[~] Збір даних... Це може зайняти кілька хвилин.\n")
 
-    # 1. Мережеве сканування
+   
     print("-> Сканування портів...")
     open_ports = scan_ports(hostname)
     
@@ -40,18 +40,18 @@ def main():
     print("-> Пошук прихованих директорій та файлів...")
     dir_info = find_hidden_directories(target_url)
 
-    # 2. Аналіз веб-конфігурації
+    
     print("-> Перевірка заголовків безпеки...")
     headers_info = check_security_headers(target_url)
     
     print("-> Визначення технологій...")
     tech_info = detect_technologies(target_url)
 
-    # 3. Пошук вразливостей
+   
     print("-> Сканування на базові вразливості (SQLi, XSS, Dir Traversal)...")
     vuln_info = scan_vulnerabilities(target_url)
 
-    # 4. Генерація звіту
+    
     print("\n[+] Сканування завершено. Формування звіту...")
     report_data = {
         "url": target_url,
